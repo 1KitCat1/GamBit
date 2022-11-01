@@ -1,20 +1,31 @@
-package com.gambit.GamBit.User;
+package com.gambit.GamBit.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private String email;
     private String password;
 
     public User() {}
 
-    public User(Long id, String name, String password) {
+    public User(Long id, String name, String email, String password) {
         this.id = id;
         this.name = name;
+        this.email = email;
         this.password = password;
     }
 
-    public User(String name, String password) {
+    public User(String name, String email, String password) {
         this.name = name;
+        this.email = email;
         this.password = password;
     }
 
@@ -34,6 +45,14 @@ public class User {
         this.name = name;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -47,6 +66,7 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }
