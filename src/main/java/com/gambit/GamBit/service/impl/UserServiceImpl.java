@@ -29,6 +29,21 @@ public class UserServiceImpl implements UserService {
         if(!user.isPresent()){
             throw new UserNotFoundException("User with such id has not been found");
         }
+//        System.out.println(user.get().getName());
         return user.get();
+    }
+
+    @Override
+    public User getUserByName(String name) throws UserNotFoundException {
+        User user = userRepo.findByName(name);
+        if(user == null){
+            throw new UserNotFoundException("User with such name has not been found");
+        }
+        return user;
+    }
+
+    @Override
+    public User deleteUserById(Long id) throws UserNotFoundException {
+        return null;
     }
 }

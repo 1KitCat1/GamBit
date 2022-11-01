@@ -1,6 +1,7 @@
 package com.gambit.GamBit.controller;
 
 import com.gambit.GamBit.exception.UserAlreadyExistException;
+import com.gambit.GamBit.exception.UserNotFoundException;
 import com.gambit.GamBit.model.User;
 import com.gambit.GamBit.repository.UserRepo;
 import com.gambit.GamBit.service.UserService;
@@ -15,7 +16,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/")
+    @PostMapping("/register")
     public ResponseEntity<String> registration(@RequestBody User user){
         try {
             userService.registration(user);
@@ -26,6 +27,7 @@ public class UserController {
             return ResponseEntity.badRequest().body("Error occurred during registration");
         }
     }
+
     @GetMapping("/")
     public ResponseEntity<String> getUsers(){
         try{
@@ -35,12 +37,31 @@ public class UserController {
         }
     }
 
-    @GetMapping("/")
-    public ResponseEntity<String> getUserById(@RequestParam Long id){
+    @GetMapping("/getById")
+    public ResponseEntity<User> getUserById(@RequestParam Long id){
         try{
-            return ResponseEntity.ok("Server is online");
+            return ResponseEntity.ok(userService.getById(id));
         } catch (Exception ex){
-            return ResponseEntity.badRequest().body("Server is not responding");
+            return ResponseEntity.badRequest().body(null);
         }
     }
+
+    @GetMapping("/getByUsername")
+    public ResponseEntity<User> getUserByUsername(@RequestParam String name) {
+        try {
+            return ResponseEntity.ok(userService.getUserByName(name));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable long id) {
+        try {
+            userService.deleteUserById(id);
+            return ResponseEntity.ok("User id" + id + " has been deleted.");
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }
