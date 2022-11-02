@@ -1,6 +1,14 @@
 package com.gambit.GamBit.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity(name = "smart_contract")
 public class SmartContract {
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long decentralizedNetworkID;
     private String address;
