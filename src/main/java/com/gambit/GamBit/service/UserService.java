@@ -10,7 +10,9 @@ public interface UserService {
 
     public User registration(User user) throws UserAlreadyExistException;
     public User getById(Long id) throws UserNotFoundException;
-    public User getUserByName(String name) throws  UserNotFoundException;
-    public User deleteUserById(Long id) throws  UserNotFoundException;
+    public User getByName(String name) throws  UserNotFoundException;
+    public void deleteById(Long id);
+    public User updateById(Long id, User updatedUser) throws UserNotFoundException;
+    public List<User> getAll();
 //    public List<User> getAll();
 }

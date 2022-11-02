@@ -3,29 +3,34 @@ package com.gambit.GamBit.service.impl;
 import com.gambit.GamBit.exception.UserNotFoundException;
 import com.gambit.GamBit.exception.UserAlreadyExistException;
 import com.gambit.GamBit.model.User;
-import com.gambit.GamBit.repository.UserRepo;
+import com.gambit.GamBit.repository.UserRepository;
 import com.gambit.GamBit.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
-    private UserRepo userRepo;
+    private UserRepository userRepository;
 
     @Override
     public User registration(User user) throws UserAlreadyExistException {
-        if(userRepo.findByName(user.getName()) != null){
+        if(userRepository.findByName(user.getName()) != null){
             throw new UserAlreadyExistException("User with such name already exist");
         }
-        return userRepo.save(user);
+//        user.setPassword(new BCryptPasswordEncoder(10).encode(user.getPassword()));
+
+        return userRepository.save(user);
     }
 
     @Override
     public User getById(Long id) throws UserNotFoundException {
-        Optional<User> user = userRepo.findById(id);
+        Optional<User> user = userRepository.findById(id);
         if(!user.isPresent()){
             throw new UserNotFoundException("User with such id has not been found");
         }
@@ -34,8 +39,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByName(String name) throws UserNotFoundException {
-        User user = userRepo.findByName(name);
+    public User getByName(String name) throws UserNotFoundException {
+        User user = userRepository.findByName(name);
         if(user == null){
             throw new UserNotFoundException("User with such name has not been found");
         }
@@ -43,7 +48,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User deleteUserById(Long id) throws UserNotFoundException {
-        return null;
+    public void deleteById(Long id){
+        userRepository.deleteById(id);
+    }
+
+    @Override
+    public User updateById(Long id, User updatedUser) throws UserNotFoundException{
+        Optional<User> oldUser = userRepository.findById(id);
+        if(!oldUser.isPresent()){
+            throw new UserNotFoundException("User with such id has not been found");
+        }
+        updatedUser.setId(id);
+        userRepository.save(updatedUser);
+        return updatedUser;
+    }
+
+    @Override
+    public List<User> getAll() {
+        return (List<User>) userRepository.findAll();
     }
 }

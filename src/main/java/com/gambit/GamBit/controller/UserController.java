@@ -3,12 +3,12 @@ package com.gambit.GamBit.controller;
 import com.gambit.GamBit.exception.UserAlreadyExistException;
 import com.gambit.GamBit.exception.UserNotFoundException;
 import com.gambit.GamBit.model.User;
-import com.gambit.GamBit.repository.UserRepo;
 import com.gambit.GamBit.service.UserService;
-import com.gambit.GamBit.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -18,6 +18,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<String> registration(@RequestBody User user){
+        System.out.println(user);
         try {
             userService.registration(user);
             return ResponseEntity.ok("New user has been successfully added");
@@ -29,11 +30,11 @@ public class UserController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<String> getUsers(){
+    public ResponseEntity<List<User>> getAllUsers(){
         try{
-            return ResponseEntity.ok("Server is online");
+            return ResponseEntity.ok(userService.getAll());
         } catch (Exception ex){
-            return ResponseEntity.badRequest().body("Server is not responding");
+            return ResponseEntity.badRequest().body(null);
         }
     }
 
@@ -46,22 +47,34 @@ public class UserController {
         }
     }
 
-    @GetMapping("/getByUsername")
-    public ResponseEntity<User> getUserByUsername(@RequestParam String name) {
+    @GetMapping("/getByName")
+    public ResponseEntity<User> getUserByName(@RequestParam String name) {
         try {
-            return ResponseEntity.ok(userService.getUserByName(name));
-        } catch (Exception e) {
+            return ResponseEntity.ok(userService.getByName(name));
+        } catch (Exception ex) {
             return ResponseEntity.badRequest().body(null);
         }
     }
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable long id) {
+
+    @DeleteMapping("/delete/")
+    public ResponseEntity<String> deleteUser(@RequestParam long id) {
         try {
-            userService.deleteUserById(id);
-            return ResponseEntity.ok("User id" + id + " has been deleted.");
-        } catch (UserNotFoundException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            userService.deleteById(id);
+            return ResponseEntity.ok("User with id " + id + " has been deleted.");
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
 
+    @PutMapping("/update/")
+    public ResponseEntity<String> updateUser(@RequestParam long id, @RequestBody User updatedUser){
+        try {
+            userService.updateById(id, updatedUser);
+            return ResponseEntity.ok("User with id " + id + " has been updated.");
+        } catch (UserNotFoundException ex) {
+            return ResponseEntity.badRequest().body("User with id " + id + " has not been found.");
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body("Error occurred during user update");
+        }
+    }
 }
