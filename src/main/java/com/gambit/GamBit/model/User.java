@@ -1,18 +1,21 @@
 package com.gambit.GamBit.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
-@Entity
+@Entity(name = "user")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
+
+    @Column(name = "email", unique = true)
     private String email;
+
+    @Column(name = "password", nullable = false)
     private String password;
 
     public User() {}
