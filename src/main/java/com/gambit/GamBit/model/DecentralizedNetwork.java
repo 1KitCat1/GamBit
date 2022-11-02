@@ -1,12 +1,23 @@
 package com.gambit.GamBit.model;
 
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity (name = "decentralized_network")
 public class DecentralizedNetwork {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
     private String addressRPC;
     private int chainID;
     private String currencyToken;
     private String blockchainExplorer;
+
+    @OneToMany(mappedBy = "decentralizedNetwork")
+    private Set<SmartContract> smartContracts= new HashSet<>();
 
     public DecentralizedNetwork() { }
 
@@ -56,6 +67,14 @@ public class DecentralizedNetwork {
 
     public void setBlockchainExplorer(String blockchainExplorer) {
         this.blockchainExplorer = blockchainExplorer;
+    }
+
+    public Set<SmartContract> getSmartContracts() {
+        return smartContracts;
+    }
+
+    public void setSmartContracts(Set<SmartContract> smartContracts) {
+        this.smartContracts = smartContracts;
     }
 
     @Override

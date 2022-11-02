@@ -1,33 +1,22 @@
 package com.gambit.GamBit.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity(name = "smart_contract")
 public class SmartContract {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long decentralizedNetworkID;
+
     private String address;
     private String ABI;
 
+    @ManyToOne (cascade = CascadeType.ALL)
+    @JoinColumn(name="decentralized_network_id", referencedColumnName = "id")
+    private DecentralizedNetwork decentralizedNetwork;
+
     public SmartContract() { }
 
-    public SmartContract(Long id, Long decentralizedNetworkID, String address, String ABI) {
-        this.id = id;
-        this.decentralizedNetworkID = decentralizedNetworkID;
-        this.address = address;
-        this.ABI = ABI;
-    }
-
-    public SmartContract(Long decentralizedNetworkID, String address, String ABI) {
-        this.decentralizedNetworkID = decentralizedNetworkID;
-        this.address = address;
-        this.ABI = ABI;
-    }
 
     public Long getId() {
         return id;
@@ -37,12 +26,12 @@ public class SmartContract {
         this.id = id;
     }
 
-    public Long getDecentralizedNetworkID() {
-        return decentralizedNetworkID;
+    public DecentralizedNetwork getDecentralizedNetwork() {
+        return decentralizedNetwork;
     }
 
-    public void setDecentralizedNetworkID(Long decentralizedNetworkID) {
-        this.decentralizedNetworkID = decentralizedNetworkID;
+    public void setDecentralizedNetwork(DecentralizedNetwork decentralizedNetwork) {
+        this.decentralizedNetwork = decentralizedNetwork;
     }
 
     public String getAddress() {
@@ -65,9 +54,9 @@ public class SmartContract {
     public String toString() {
         return "SmartContract{" +
                 "id=" + id +
-                ", decentralizedNetworkID=" + decentralizedNetworkID +
                 ", address='" + address + '\'' +
                 ", ABI='" + ABI + '\'' +
+                ", decentralizedNetwork=" + decentralizedNetwork +
                 '}';
     }
 }
