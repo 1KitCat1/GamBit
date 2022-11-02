@@ -6,7 +6,7 @@ import com.gambit.GamBit.model.User;
 import com.gambit.GamBit.repository.UserRepository;
 import com.gambit.GamBit.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
