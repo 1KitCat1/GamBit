@@ -1,10 +1,12 @@
 package com.gambit.GamBit.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
-@Entity(name = "user")
+@Entity(name = "user") @Data
 public class User {
 
     @Id

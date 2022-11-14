@@ -2,7 +2,9 @@ package com.gambit.GamBit.service.impl;
 
 import com.gambit.GamBit.exception.UserNotFoundException;
 import com.gambit.GamBit.exception.UserAlreadyExistException;
+import com.gambit.GamBit.model.Role;
 import com.gambit.GamBit.model.User;
+import com.gambit.GamBit.repository.RoleRepository;
 import com.gambit.GamBit.repository.UserRepository;
 import com.gambit.GamBit.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +19,14 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Override
     public User registration(User user) throws UserAlreadyExistException {
+        System.out.println("Registration user " + user.getName());
         if(userRepository.findByName(user.getName()) != null){
+            System.out.println("User already exist " + user.getName());
             throw new UserAlreadyExistException("User with such name already exist");
         }
 //        user.setPassword(new BCryptPasswordEncoder(10).encode(user.getPassword()));
@@ -66,5 +72,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAll() {
         return (List<User>) userRepository.findAll();
+    }
+
+    @Override
+    public void addRoleToUser(String userName, String roleName) {
+        System.out.println("Adding role " + roleName + " to user " + userName);
+        User user = userRepository.findByName(userName);
+        Role role = roleRepository.findByName(roleName);
+        user.getRoles().add(role);
     }
 }

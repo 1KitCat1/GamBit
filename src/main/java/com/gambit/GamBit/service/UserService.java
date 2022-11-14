@@ -14,5 +14,5 @@ public interface UserService {
     public void deleteById(Long id);
     public User updateById(Long id, User updatedUser) throws UserNotFoundException;
     public List<User> getAll();
-//    public List<User> getAll();
+    void addRoleToUser(String userName, String roleName);
 }
