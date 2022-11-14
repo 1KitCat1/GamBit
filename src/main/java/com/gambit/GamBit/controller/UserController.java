@@ -77,4 +77,14 @@ public class UserController {
             return ResponseEntity.badRequest().body("Error occurred during user update");
         }
     }
+
+    @PostMapping("/addRole")
+    public ResponseEntity<String> addRoleToUser(@RequestParam String userName, @RequestParam String roleName){
+        try {
+            userService.addRoleToUser(userName, roleName);
+            return ResponseEntity.ok("User " + userName + " now has role " + roleName);
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body("Error occurred during adding role to user");
+        }
+    }
 }
