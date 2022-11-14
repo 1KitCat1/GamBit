@@ -1,6 +1,8 @@
 package com.gambit.GamBit.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Entity(name = "user")
 public class User {
@@ -17,6 +19,10 @@ public class User {
 
     @Column(name = "password", nullable = false)
     private String password;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Collection<Role> roles = new ArrayList<>();
+
 
     public User() {}
 
