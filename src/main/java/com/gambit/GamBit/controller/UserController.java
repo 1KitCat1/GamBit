@@ -10,13 +10,16 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.gambit.GamBit.controller.AccessRolesController.*;
+
 @RestController
-@RequestMapping("/users")
+//@RequestMapping("/users")
 public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/register")
+    private final String USERS = "/users";
+    @PostMapping(ACCESS_VISITOR + USERS + "/register")
     public ResponseEntity<String> registration(@RequestBody User user){
         System.out.println(user);
         try {
@@ -29,7 +32,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/getAll")
+    @GetMapping(ACCESS_ADMIN + USERS + "/getAll")
     public ResponseEntity<List<User>> getAllUsers(){
         try{
             return ResponseEntity.ok(userService.getAll());
@@ -38,7 +41,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/getById")
+    @GetMapping(ACCESS_ADMIN + USERS + "/getById")
     public ResponseEntity<User> getUserById(@RequestParam Long id){
         try{
             return ResponseEntity.ok(userService.getById(id));
@@ -47,7 +50,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/getByName")
+    @GetMapping(ACCESS_ADMIN + USERS + "/getByName")
     public ResponseEntity<User> getUserByName(@RequestParam String name) {
         try {
             return ResponseEntity.ok(userService.getByName(name));
@@ -56,7 +59,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping(ACCESS_ADMIN + USERS + "/delete")
     public ResponseEntity<String> deleteUser(@RequestParam long id) {
         try {
             userService.deleteById(id);
@@ -66,7 +69,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/update")
+    @PutMapping(ACCESS_USER + USERS + "/update")
     public ResponseEntity<String> updateUser(@RequestParam long id, @RequestBody User updatedUser){
         try {
             userService.updateById(id, updatedUser);
@@ -78,7 +81,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/admin/addRole")
+    @PostMapping(ACCESS_USER + USERS + "/addRole")
     public ResponseEntity<String> addRoleToUser(@RequestParam String userName, @RequestParam String roleName){
         try {
             userService.addRoleToUser(userName, roleName);
