@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface UserService {
 
-    public User registration(User user) throws UserAlreadyExistException;
-    public User getById(Long id) throws UserNotFoundException;
-    public User getByName(String name) throws  UserNotFoundException;
-    public void deleteById(Long id);
-    public User updateById(Long id, User updatedUser) throws UserNotFoundException;
-    public List<User> getAll();
+    User registration(User user) throws UserAlreadyExistException;
+    User getById(Long id) throws UserNotFoundException;
+    User getByName(String name) throws  UserNotFoundException;
+    void deleteById(Long id);
+    User updateById(Long id, User updatedUser) throws UserNotFoundException;
+    List<User> getAll();
     void addRoleToUser(String userName, String roleName);
 }

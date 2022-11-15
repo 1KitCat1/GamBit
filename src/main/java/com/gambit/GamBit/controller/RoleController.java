@@ -22,6 +22,7 @@ public class RoleController {
     public ResponseEntity<String> addRole(@RequestBody Role role){
         System.out.println(role);
         try {
+            roleService.addRole(role);
             return ResponseEntity.ok("Role " + role.getName() + " has been successfully added");
         } catch(Exception ex){
             return ResponseEntity.badRequest().body("Error occurred during adding role " + role.getName());
