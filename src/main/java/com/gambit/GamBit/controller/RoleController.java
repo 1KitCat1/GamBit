@@ -17,8 +17,8 @@ import static com.gambit.GamBit.controller.AccessRolesController.ACCESS_ADMIN;
 @RequiredArgsConstructor
 public class RoleController {
     private final RoleService roleService;
-    private final String ROLE = "/roles";
-    @PostMapping(ACCESS_ADMIN + ROLE + "/add")
+    private final String ROLES = "/roles";
+    @PostMapping(ACCESS_ADMIN + ROLES + "/add")
     public ResponseEntity<String> addRole(@RequestBody Role role){
         System.out.println(role);
         try {

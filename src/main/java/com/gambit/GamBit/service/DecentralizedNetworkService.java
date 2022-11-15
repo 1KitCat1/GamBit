@@ -1,6 +1,7 @@
 package com.gambit.GamBit.service;
 
 
+import com.gambit.GamBit.exception.NetworkAlreadyExistException;
 import com.gambit.GamBit.model.DecentralizedNetwork;
 import com.gambit.GamBit.model.User;
 
@@ -15,5 +16,5 @@ public interface DecentralizedNetworkService {
 
     DecentralizedNetwork getById(Long id);
 
-    void addNetwork(DecentralizedNetwork network);
+    DecentralizedNetwork addNetwork(DecentralizedNetwork network) throws NetworkAlreadyExistException;
 }

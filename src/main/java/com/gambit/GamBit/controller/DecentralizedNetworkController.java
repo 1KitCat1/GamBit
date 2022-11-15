@@ -18,9 +18,9 @@ import static com.gambit.GamBit.controller.AccessRolesController.ACCESS_USER;
 @RequiredArgsConstructor
 public class DecentralizedNetworkController {
     private final DecentralizedNetworkService decentralizedNetworkService;
-    private final String NETWORK = "/network";
+    private final String NETWORKS = "/networks";
 
-    @PostMapping(ACCESS_ADMIN + NETWORK + "/add")
+    @PostMapping(ACCESS_ADMIN + NETWORKS + "/add")
     public ResponseEntity<String> addRole(@RequestBody DecentralizedNetwork network){
         System.out.println(network);
         try {
@@ -31,7 +31,7 @@ public class DecentralizedNetworkController {
         }
     }
 
-    @GetMapping(ACCESS_USER + NETWORK + "/getAll")
+    @GetMapping(ACCESS_USER + NETWORKS + "/getAll")
     public ResponseEntity<List<DecentralizedNetwork>> getAllNetworks(){
         try{
             return ResponseEntity.ok(decentralizedNetworkService.getAll());
@@ -40,7 +40,7 @@ public class DecentralizedNetworkController {
         }
     }
 
-    @GetMapping(ACCESS_USER + NETWORK + "/getById")
+    @GetMapping(ACCESS_USER + NETWORKS + "/getById")
     public ResponseEntity<DecentralizedNetwork> getUserById(@RequestParam Long id){
         try{
             return ResponseEntity.ok(decentralizedNetworkService.getById(id));
@@ -49,7 +49,7 @@ public class DecentralizedNetworkController {
         }
     }
 
-    @DeleteMapping(ACCESS_ADMIN + NETWORK + "/delete")
+    @DeleteMapping(ACCESS_ADMIN + NETWORKS + "/delete")
     public ResponseEntity<String> deleteUser(@RequestParam long id) {
         try {
             decentralizedNetworkService.deleteById(id);
@@ -59,7 +59,7 @@ public class DecentralizedNetworkController {
         }
     }
 
-    @PutMapping(ACCESS_ADMIN + NETWORK + "/update")
+    @PutMapping(ACCESS_ADMIN + NETWORKS + "/update")
     public ResponseEntity<String> updateUser(@RequestParam long id, @RequestBody User updatedUser){
         try {
             decentralizedNetworkService.updateById(id, updatedUser);
