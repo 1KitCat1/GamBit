@@ -29,7 +29,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/")
+    @GetMapping("/getAll")
     public ResponseEntity<List<User>> getAllUsers(){
         try{
             return ResponseEntity.ok(userService.getAll());
@@ -56,7 +56,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/delete/")
+    @DeleteMapping("/delete")
     public ResponseEntity<String> deleteUser(@RequestParam long id) {
         try {
             userService.deleteById(id);
@@ -66,7 +66,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/update/")
+    @PutMapping("/update")
     public ResponseEntity<String> updateUser(@RequestParam long id, @RequestBody User updatedUser){
         try {
             userService.updateById(id, updatedUser);
@@ -78,7 +78,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/addRole")
+    @PostMapping("/admin/addRole")
     public ResponseEntity<String> addRoleToUser(@RequestParam String userName, @RequestParam String roleName){
         try {
             userService.addRoleToUser(userName, roleName);
