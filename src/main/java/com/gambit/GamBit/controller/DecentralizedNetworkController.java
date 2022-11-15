@@ -25,9 +25,9 @@ public class DecentralizedNetworkController {
         System.out.println(network);
         try {
             decentralizedNetworkService.addNetwork(network);
-            return ResponseEntity.ok("Role " + network.getName() + " has been successfully added");
+            return ResponseEntity.ok("Network " + network.getName() + " has been successfully added");
         } catch(Exception ex){
-            return ResponseEntity.badRequest().body("Error occurred during adding role " + network.getName());
+            return ResponseEntity.badRequest().body("Error occurred during adding network " + network.getName());
         }
     }
 
@@ -41,7 +41,7 @@ public class DecentralizedNetworkController {
     }
 
     @GetMapping(ACCESS_USER + NETWORKS + "/getById")
-    public ResponseEntity<DecentralizedNetwork> getUserById(@RequestParam Long id){
+    public ResponseEntity<DecentralizedNetwork> getNetworkById(@RequestParam Long id){
         try{
             return ResponseEntity.ok(decentralizedNetworkService.getById(id));
         } catch (Exception ex){
@@ -53,19 +53,19 @@ public class DecentralizedNetworkController {
     public ResponseEntity<String> deleteUser(@RequestParam long id) {
         try {
             decentralizedNetworkService.deleteById(id);
-            return ResponseEntity.ok("User with id " + id + " has been deleted.");
+            return ResponseEntity.ok("Decentralized Network with id " + id + " has been deleted.");
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
 
     @PutMapping(ACCESS_ADMIN + NETWORKS + "/update")
-    public ResponseEntity<String> updateUser(@RequestParam long id, @RequestBody User updatedUser){
+    public ResponseEntity<String> updateNetwork(@RequestParam long id, @RequestBody DecentralizedNetwork updatedNetwork){
         try {
-            decentralizedNetworkService.updateById(id, updatedUser);
-            return ResponseEntity.ok("User with id " + id + " has been updated.");
+            decentralizedNetworkService.updateById(id, updatedNetwork);
+            return ResponseEntity.ok("Network with id " + id + " has been updated.");
         } catch (Exception ex) {
-            return ResponseEntity.badRequest().body("Error occurred during user update");
+            return ResponseEntity.badRequest().body("Error occurred during network update");
         }
     }
 }
