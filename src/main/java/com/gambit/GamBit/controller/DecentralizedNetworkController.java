@@ -21,7 +21,7 @@ public class DecentralizedNetworkController {
     private final String NETWORKS = "/networks";
 
     @PostMapping(ACCESS_ADMIN + NETWORKS + "/add")
-    public ResponseEntity<String> addRole(@RequestBody DecentralizedNetwork network){
+    public ResponseEntity<String> addNetwork(@RequestBody DecentralizedNetwork network){
         System.out.println(network);
         try {
             decentralizedNetworkService.addNetwork(network);
@@ -50,7 +50,7 @@ public class DecentralizedNetworkController {
     }
 
     @DeleteMapping(ACCESS_ADMIN + NETWORKS + "/delete")
-    public ResponseEntity<String> deleteUser(@RequestParam long id) {
+    public ResponseEntity<String> deleteNetwork(@RequestParam long id) {
         try {
             decentralizedNetworkService.deleteById(id);
             return ResponseEntity.ok("Decentralized Network with id " + id + " has been deleted.");

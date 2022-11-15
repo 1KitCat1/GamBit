@@ -9,6 +9,9 @@ public class SmartContract {
     private Long id;
 
     private String address;
+
+//    @Column(columnDefinition="varchar(25500)")
+    // TODO: change db column type to handle larger data
     private String ABI;
 
     @ManyToOne (cascade = CascadeType.ALL)
