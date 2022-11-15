@@ -15,7 +15,7 @@ public interface DecentralizedNetworkService {
 
     void updateById(long id, DecentralizedNetwork updatedNetwork) throws ObjectNotFoundException;
 
-    DecentralizedNetwork getById(Long id);
+    DecentralizedNetwork getById(Long id) throws ObjectNotFoundException;
 
     DecentralizedNetwork addNetwork(DecentralizedNetwork network) throws NetworkAlreadyExistException;
 }
