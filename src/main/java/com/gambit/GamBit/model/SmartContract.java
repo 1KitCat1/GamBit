@@ -12,6 +12,7 @@ public class SmartContract {
 
 //    @Column(columnDefinition="varchar(25500)")
     // TODO: change db column type to handle larger data
+    @Column(length = 2550)
     private String ABI;
 
     @ManyToOne (cascade = CascadeType.ALL)

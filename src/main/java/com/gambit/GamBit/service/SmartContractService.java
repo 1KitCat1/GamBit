@@ -1,7 +1,6 @@
 package com.gambit.GamBit.service;
 
 import com.gambit.GamBit.exception.ObjectNotFoundException;
-import com.gambit.GamBit.model.DecentralizedNetwork;
 import com.gambit.GamBit.model.SmartContract;
 
 import java.util.List;
@@ -16,4 +15,6 @@ public interface SmartContractService {
     void deleteById(long id);
 
     void updateById(long id, SmartContract updatedContract) throws ObjectNotFoundException;
+
+    SmartContract setNetwork(Long networkId, Long contractId)  throws ObjectNotFoundException ;
 }

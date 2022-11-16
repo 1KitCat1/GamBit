@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import static com.gambit.GamBit.controller.AccessRolesController.ACCESS_ADMIN;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
@@ -40,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(STATELESS); // No session will be created or used by Spring Security.
 
 //        http.authorizeRequests().antMatchers(POST, "admin/**").hasAnyAuthority("ROLE_ADMIN");
-//        http.authorizeRequests().antMatchers(GET, "admin/**").hasAnyAuthority("ROLE_ADMIN");
+//        http.authorizeRequests().antMatchers(GET, ACCESS_ADMIN + "/**").hasAnyAuthority("ROLE_ADMIN");
 
         http.authorizeRequests().anyRequest().permitAll();
         http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));

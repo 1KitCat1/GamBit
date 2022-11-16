@@ -1,13 +1,16 @@
 package com.gambit.GamBit.controller;
 
+import com.gambit.GamBit.exception.ObjectNotFoundException;
 import com.gambit.GamBit.model.DecentralizedNetwork;
 import com.gambit.GamBit.model.SmartContract;
+import com.gambit.GamBit.service.DecentralizedNetworkService;
 import com.gambit.GamBit.service.SmartContractService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.gambit.GamBit.controller.AccessRolesController.ACCESS_ADMIN;
 import static com.gambit.GamBit.controller.AccessRolesController.ACCESS_USER;
@@ -16,7 +19,6 @@ import static com.gambit.GamBit.controller.AccessRolesController.ACCESS_USER;
 @RequiredArgsConstructor
 public class SmartContractController {
     private final SmartContractService smartContractService;
-
     private final String CONTRACTS = "/contracts";
 
     @PostMapping(ACCESS_ADMIN + CONTRACTS + "/add")
@@ -27,6 +29,17 @@ public class SmartContractController {
             return ResponseEntity.ok("Contract " + contract.getAddress() + " has been successfully added");
         } catch(Exception ex){
             return ResponseEntity.badRequest().body("Error occurred during adding smart contract " + contract.getAddress());
+        }
+    }
+
+    @PostMapping(ACCESS_ADMIN + CONTRACTS + "/addNetwork")
+    public ResponseEntity<String> setNetwork(@RequestParam Long contractId, @RequestParam Long networkId){
+        System.out.println("Adding network to smart contract");
+        try {
+            SmartContract contract = smartContractService.setNetwork(contractId, networkId);
+            return ResponseEntity.ok("Set network at contract " + contract.getAddress());
+        } catch(Exception ex){
+            return ResponseEntity.badRequest().body("Error occurred during adding network to smart contract ");
         }
     }
 
