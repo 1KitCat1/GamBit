@@ -13,7 +13,7 @@ import static com.gambit.GamBit.controller.AccessRolesController.ACCESS_USER;
 @RestController
 @RequiredArgsConstructor
 public class WalletController {
-    private WalletService walletService;
+    private final WalletService walletService;
     private final String WALLETS = "/wallets";
 
     @PostMapping(ACCESS_USER + WALLETS + "/add")
@@ -23,6 +23,7 @@ public class WalletController {
             walletService.addWallet(wallet);
             return ResponseEntity.ok("Wallet " + wallet.getAddress() + " has been successfully added");
         } catch(Exception ex){
+            System.out.println(ex.getMessage() + ex.toString());
             return ResponseEntity.badRequest().body("Error occurred during adding wallet " + wallet.getAddress());
         }
     }

@@ -1,5 +1,7 @@
 package com.gambit.GamBit.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,7 +17,7 @@ public class DecentralizedNetwork {
     private int chainID;
     private String currencyToken;
     private String blockchainExplorer;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "decentralizedNetwork")
     private Set<SmartContract> smartContracts= new HashSet<>();
 
