@@ -1,16 +1,20 @@
 package com.gambit.GamBit.service;
 
+import com.gambit.GamBit.exception.ObjectAlreadyExistException;
+import com.gambit.GamBit.exception.ObjectNotFoundException;
+import com.gambit.GamBit.exception.UserNotFoundException;
 import com.gambit.GamBit.model.Wallet;
 import java.util.List;
 
 public interface WalletService {
-    void addRole(Wallet wallet);
 
-    Wallet getByAddress(String address);
+    void addWallet(Wallet wallet);
 
-    void deleteById(Long id);
+    Wallet getById(Long id) throws ObjectNotFoundException;
 
-    void updateById(Long id, Wallet updatedWallet);
+    void deleteById(Long id) throws ObjectNotFoundException;
 
-    List<Wallet> getByUsername(String name);
+    void updateById(Long id, Wallet updatedWallet) throws ObjectNotFoundException;
+
+    List<Wallet> getByUsername(String name) throws UserNotFoundException;
 }

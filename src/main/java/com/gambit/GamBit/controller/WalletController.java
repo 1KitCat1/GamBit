@@ -1,19 +1,13 @@
 package com.gambit.GamBit.controller;
 
-import com.gambit.GamBit.exception.UserNotFoundException;
-import com.gambit.GamBit.model.Role;
-import com.gambit.GamBit.model.User;
 import com.gambit.GamBit.model.Wallet;
-import com.gambit.GamBit.service.RoleService;
 import com.gambit.GamBit.service.WalletService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.gambit.GamBit.controller.AccessRolesController.ACCESS_ADMIN;
 import static com.gambit.GamBit.controller.AccessRolesController.ACCESS_USER;
 
 @RestController
@@ -26,17 +20,17 @@ public class WalletController {
     public ResponseEntity<String> addWallet(@RequestBody Wallet wallet){
         System.out.println(wallet);
         try {
-            walletService.addRole(wallet);
+            walletService.addWallet(wallet);
             return ResponseEntity.ok("Wallet " + wallet.getAddress() + " has been successfully added");
         } catch(Exception ex){
             return ResponseEntity.badRequest().body("Error occurred during adding wallet " + wallet.getAddress());
         }
     }
 
-    @GetMapping(ACCESS_USER + WALLETS + "/getByAddress")
-    public ResponseEntity<Wallet> getWalletByAddress(@RequestParam String name) {
+    @GetMapping(ACCESS_USER + WALLETS + "/getById")
+    public ResponseEntity<Wallet> getWalletByAddress(@RequestParam Long id) {
         try {
-            return ResponseEntity.ok(walletService.getByAddress(name));
+            return ResponseEntity.ok(walletService.getById(id));
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body(null);
         }
