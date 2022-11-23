@@ -29,7 +29,7 @@ public class WalletController {
     }
 
     @GetMapping(ACCESS_USER + WALLETS + "/getById")
-    public ResponseEntity<Wallet> getWalletByAddress(@RequestParam Long id) {
+    public ResponseEntity<Wallet> getWalletById(@RequestParam Long id) {
         try {
             return ResponseEntity.ok(walletService.getById(id));
         } catch (Exception ex) {
