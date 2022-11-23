@@ -38,15 +38,6 @@ public class GameController {
         }
     }
 
-    @GetMapping(ACCESS_USER + GAMES + "/getByWallet")
-    public ResponseEntity<List<Game>> getWalletsByWallet(@RequestParam Long id) {
-        try {
-            return ResponseEntity.ok(gameService.getByWallet(id));
-        } catch (Exception ex) {
-            return ResponseEntity.badRequest().body(null);
-        }
-    }
-
     @DeleteMapping(ACCESS_USER + GAMES + "/delete")
     public ResponseEntity<String> deleteWallet(@RequestParam Long id) {
         try {

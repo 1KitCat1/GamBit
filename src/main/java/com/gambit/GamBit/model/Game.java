@@ -17,6 +17,9 @@ public class Game {
     @Column(name = "game_score")
     Long gameScore;
 
+    @Column(name = "random_salt")
+    String randomSalt;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="contract_id", referencedColumnName = "id")
     SmartContract smartContract;
