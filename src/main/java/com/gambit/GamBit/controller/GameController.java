@@ -18,7 +18,7 @@ public class GameController {
     private final String GAMES = "/games";
 
     @PostMapping(ACCESS_USER + GAMES + "/add")
-    public ResponseEntity<String> addWallet(@RequestBody Game game){
+    public ResponseEntity<String> addGame(@RequestBody Game game){
         System.out.println(game);
         try {
             gameService.addGame(game);
@@ -30,7 +30,7 @@ public class GameController {
     }
 
     @GetMapping(ACCESS_USER + GAMES + "/getById")
-    public ResponseEntity<Game> getWalletById(@RequestParam Long id) {
+    public ResponseEntity<Game> getGameById(@RequestParam Long id) {
         try {
             return ResponseEntity.ok(gameService.getById(id));
         } catch (Exception ex) {
@@ -39,7 +39,7 @@ public class GameController {
     }
 
     @DeleteMapping(ACCESS_USER + GAMES + "/delete")
-    public ResponseEntity<String> deleteWallet(@RequestParam Long id) {
+    public ResponseEntity<String> deleteGame(@RequestParam Long id) {
         try {
             gameService.deleteById(id);
             return ResponseEntity.ok("Game with id " + id + " has been deleted.");
