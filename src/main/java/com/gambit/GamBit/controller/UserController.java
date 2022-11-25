@@ -17,8 +17,8 @@ import static com.gambit.GamBit.controller.AccessRolesController.*;
 public class UserController {
     @Autowired
     private UserService userService;
-
     private final String USERS = "/users";
+
     @PostMapping(ACCESS_VISITOR + USERS + "/register")
     public ResponseEntity<String> registration(@RequestBody User user){
         System.out.println(user);
