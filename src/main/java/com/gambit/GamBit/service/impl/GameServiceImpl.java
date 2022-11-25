@@ -3,7 +3,11 @@ package com.gambit.GamBit.service.impl;
 import com.gambit.GamBit.exception.ObjectNotFoundException;
 import com.gambit.GamBit.exception.RoleAlreadyExistException;
 import com.gambit.GamBit.model.Game;
+import com.gambit.GamBit.model.Player;
+import com.gambit.GamBit.model.SmartContract;
+import com.gambit.GamBit.model.Wallet;
 import com.gambit.GamBit.repository.GameRepository;
+import com.gambit.GamBit.repository.SmartContractRepository;
 import com.gambit.GamBit.service.GameService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,7 +20,17 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class GameServiceImpl implements GameService {
     private final GameRepository gameRepository;
+    private final SmartContractRepository contractRepository;
+
     private final Random random = new Random(LocalDateTime.now().getNano());
+
+    private void loadConnectedEntitiesById(Game game){
+        if(game.getSmartContract() != null && game.getSmartContract().getId() != null){
+            Optional<SmartContract> contract = contractRepository.findById(game.getSmartContract().getId());
+            contract.ifPresent(game::setSmartContract);
+        }
+    }
+
     @Override
     public void addGame(Game game) {
         if(game.getDateTime() == null) { game.setDateTime(LocalDateTime.now()); }
@@ -29,7 +43,7 @@ public class GameServiceImpl implements GameService {
                     ((Long)Math.abs(random.nextLong())).toString()
             );
         }
-
+        loadConnectedEntitiesById(game);
         gameRepository.save(game);
     }
 
@@ -58,6 +72,7 @@ public class GameServiceImpl implements GameService {
             throw new ObjectNotFoundException("No game with such id");
         }
         updatedGame.setId(id);
+        loadConnectedEntitiesById(updatedGame);
         gameRepository.save(updatedGame);
     }
 }
