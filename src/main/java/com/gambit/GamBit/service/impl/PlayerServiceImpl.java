@@ -64,7 +64,7 @@ public class PlayerServiceImpl implements PlayerService {
         if(!player.isPresent()){
             throw new ObjectNotFoundException("No player with such id");
         }
-        
+
         loadConnectedEntitiesById(updatedGame);
         updatedGame.setId(id);
         playerRepository.save(updatedGame);
@@ -72,6 +72,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public List<Player> getByWallet(String address) {
-        return null;
+        Wallet wallet = walletRepository.findByAddress(address);
+        return playerRepository.findByWallet(wallet);
     }
 }
