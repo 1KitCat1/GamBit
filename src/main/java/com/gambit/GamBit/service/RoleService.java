@@ -9,4 +9,8 @@ public interface RoleService {
     public Role addRole(Role role) throws RoleAlreadyExistException;
 
     List<Role> getAll();
+
+    void deleteRole(Long id);
+
+    void updateRole(Long id, Role updatedRole);
 }
