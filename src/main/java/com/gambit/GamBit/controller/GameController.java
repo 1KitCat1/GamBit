@@ -67,4 +67,12 @@ public class GameController {
         }
     }
 
+    @GetMapping(ACCESS_USER + GAMES + "/getResult")
+    public ResponseEntity<String> getNotHashedResult(@RequestParam Long id){
+        try {
+            return ResponseEntity.ok(gameService.getNotHashedResult(id));
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body("Error occurred during getting game result");
+        }
+    }
 }

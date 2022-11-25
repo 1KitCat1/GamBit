@@ -13,4 +13,6 @@ public interface GameService {
     void updateById(Long id, Game updatedGame) throws ObjectNotFoundException;
 
     String getHashedResult(Long id) throws ObjectNotFoundException;
+
+    String getNotHashedResult(Long id) throws ObjectNotFoundException;
 }

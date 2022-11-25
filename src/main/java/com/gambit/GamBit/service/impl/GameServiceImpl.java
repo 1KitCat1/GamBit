@@ -94,12 +94,17 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public String getHashedResult(Long id) throws ObjectNotFoundException {
+    public String getNotHashedResult(Long id) throws ObjectNotFoundException {
         Optional<Game> game = gameRepository.findById(id);
         if(!game.isPresent()){
             throw new ObjectNotFoundException("No game with such id");
         }
-        String message = generateResultMessage(game.get());
+        return generateResultMessage(game.get());
+    }
+
+    @Override
+    public String getHashedResult(Long id) throws ObjectNotFoundException {
+        String message = getNotHashedResult(id);
         try{
             MessageDigest digester = MessageDigest.getInstance("SHA-256");
             byte[] hashedMessage = digester.digest(message.getBytes());
@@ -109,5 +114,4 @@ public class GameServiceImpl implements GameService {
             // TODO : maybe do smth here (there should be no exception actually)
         }
     }
-
 }
