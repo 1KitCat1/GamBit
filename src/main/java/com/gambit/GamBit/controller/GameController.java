@@ -57,4 +57,14 @@ public class GameController {
             return ResponseEntity.badRequest().body("Error occurred during game update");
         }
     }
+
+    @GetMapping(ACCESS_USER + GAMES + "/getHashedResult")
+    public ResponseEntity<String> getHashedResult(@RequestParam Long id){
+        try {
+            return ResponseEntity.ok(gameService.getHashedResult(id));
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body("Error occurred during getting game result");
+        }
+    }
+
 }

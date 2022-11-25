@@ -11,4 +11,6 @@ public interface GameService {
     void deleteById(Long id) throws ObjectNotFoundException;
 
     void updateById(Long id, Game updatedGame) throws ObjectNotFoundException;
+
+    String getHashedResult(Long id) throws ObjectNotFoundException;
 }

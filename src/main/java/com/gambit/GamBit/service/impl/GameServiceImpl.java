@@ -10,8 +10,11 @@ import com.gambit.GamBit.repository.GameRepository;
 import com.gambit.GamBit.repository.SmartContractRepository;
 import com.gambit.GamBit.service.GameService;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.bridge.Message;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Random;
@@ -29,6 +32,20 @@ public class GameServiceImpl implements GameService {
             Optional<SmartContract> contract = contractRepository.findById(game.getSmartContract().getId());
             contract.ifPresent(game::setSmartContract);
         }
+    }
+
+    private String generateResultMessage(Game game){
+        return "Game id: " + game.getId() +
+                " | timestamp: " + game.getDateTime() +
+                " | RESULT: " + game.getGameScore() +
+                " | protection: " + game.getRandomSalt();
+    }
+
+    public static String byteArrayToHex(byte[] bytes) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for(byte b: bytes)
+            stringBuilder.append(String.format("%02x", b));
+        return stringBuilder.toString();
     }
 
     @Override
@@ -75,4 +92,22 @@ public class GameServiceImpl implements GameService {
         loadConnectedEntitiesById(updatedGame);
         gameRepository.save(updatedGame);
     }
+
+    @Override
+    public String getHashedResult(Long id) throws ObjectNotFoundException {
+        Optional<Game> game = gameRepository.findById(id);
+        if(!game.isPresent()){
+            throw new ObjectNotFoundException("No game with such id");
+        }
+        String message = generateResultMessage(game.get());
+        try{
+            MessageDigest digester = MessageDigest.getInstance("SHA-256");
+            byte[] hashedMessage = digester.digest(message.getBytes());
+             return byteArrayToHex(hashedMessage);
+        } catch (Exception ex){
+            return "Error occurred during hashing result";
+            // TODO : maybe do smth here (there should be no exception actually)
+        }
+    }
+
 }
