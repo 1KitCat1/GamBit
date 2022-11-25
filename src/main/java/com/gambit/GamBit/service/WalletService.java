@@ -16,5 +16,5 @@ public interface WalletService {
 
     void updateById(Long id, Wallet updatedWallet) throws ObjectNotFoundException;
 
-    List<Wallet> getByUsername(String name) throws UserNotFoundException;
+    List<Wallet> getByUserId(Long id) throws UserNotFoundException;
 }

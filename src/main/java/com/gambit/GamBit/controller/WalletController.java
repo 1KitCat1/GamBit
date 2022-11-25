@@ -37,10 +37,10 @@ public class WalletController {
         }
     }
 
-    @GetMapping(ACCESS_USER + WALLETS + "/getByUsername")
-    public ResponseEntity<List<Wallet>> getWalletsByUsername(@RequestParam String name) {
+    @GetMapping(ACCESS_USER + WALLETS + "/getByUserId")
+    public ResponseEntity<List<Wallet>> getWalletsByUserId(@RequestParam Long id) {
         try {
-            return ResponseEntity.ok(walletService.getByUsername(name));
+            return ResponseEntity.ok(walletService.getByUserId(id));
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body(null);
         }
@@ -57,7 +57,9 @@ public class WalletController {
     }
 
     @PutMapping(ACCESS_USER + WALLETS + "/update")
-    public ResponseEntity<String> updateWallet(@RequestParam Long id, @RequestBody Wallet updatedWallet){
+    public ResponseEntity<String> updateWallet(@RequestParam Long id,
+                                               @RequestBody Wallet updatedWallet
+    ){
         try {
             walletService.updateById(id, updatedWallet);
             return ResponseEntity.ok("Wallet with id " + id + " has been updated.");

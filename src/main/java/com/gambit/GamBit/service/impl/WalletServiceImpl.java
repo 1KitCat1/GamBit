@@ -3,8 +3,10 @@ package com.gambit.GamBit.service.impl;
 import com.gambit.GamBit.exception.ObjectAlreadyExistException;
 import com.gambit.GamBit.exception.ObjectNotFoundException;
 import com.gambit.GamBit.exception.UserNotFoundException;
+import com.gambit.GamBit.model.DecentralizedNetwork;
 import com.gambit.GamBit.model.User;
 import com.gambit.GamBit.model.Wallet;
+import com.gambit.GamBit.repository.DecentralizedNetworkRepository;
 import com.gambit.GamBit.repository.UserRepository;
 import com.gambit.GamBit.repository.WalletRepository;
 import com.gambit.GamBit.service.WalletService;
@@ -19,8 +21,23 @@ import java.util.Optional;
 public class WalletServiceImpl implements WalletService {
     private final WalletRepository walletRepository;
     private final UserRepository userRepository;
+    private final DecentralizedNetworkRepository networkRepository;
+
+    private void loadConnectedEntitiesById(Wallet wallet){
+        if(wallet.getUser() != null && wallet.getUser().getId() != null){
+            Optional<User> user = userRepository.findById(wallet.getUser().getId());
+            user.ifPresent(wallet::setUser);
+        }
+        if(wallet.getNetwork() != null && wallet.getNetwork().getId() != null){
+            Optional<DecentralizedNetwork> network =
+                    networkRepository.findById(wallet.getNetwork().getId());
+            network.ifPresent(wallet::setNetwork);
+        }
+    }
+
     @Override
     public void addWallet(Wallet wallet){
+        loadConnectedEntitiesById(wallet);
         walletRepository.save(wallet);
     }
 
@@ -46,18 +63,21 @@ public class WalletServiceImpl implements WalletService {
     public void updateById(Long id, Wallet updatedWallet) throws ObjectNotFoundException {
         Optional<Wallet> oldWallet = walletRepository.findById(id);
         if(!oldWallet.isPresent()){
-            throw new ObjectNotFoundException("Contract with such id has not been found");
+            throw new ObjectNotFoundException("Wallet with such id has not been found");
         }
+
+        loadConnectedEntitiesById(updatedWallet);
+        System.out.println();
         updatedWallet.setId(id);
         walletRepository.save(updatedWallet);
     }
 
     @Override
-    public List<Wallet> getByUsername(String name) throws UserNotFoundException {
-        User user = userRepository.findByName(name);
-        if(user == null){
+    public List<Wallet> getByUserId(Long id) throws UserNotFoundException {
+        Optional<User> user = userRepository.findById(id);
+        if(user.isPresent()){
             throw new UserNotFoundException("No user with such username");
         }
-        return walletRepository.findByUser(user);
+        return walletRepository.findByUser(user.get());
     }
 }
