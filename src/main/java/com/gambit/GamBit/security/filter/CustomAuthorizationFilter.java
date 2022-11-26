@@ -19,11 +19,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import static java.util.Arrays.stream;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        System.out.println("989348943!!!!!");
         if(request.getServletPath().equals("/login")){
             filterChain.doFilter(request, response);
         } else {
@@ -50,7 +50,8 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     filterChain.doFilter(request, response);
                 } catch (Exception exception){
-
+                    System.out.println("Error occurred during authorization");
+                    response.sendError(FORBIDDEN.value());
                 }
             }
             else {
