@@ -22,6 +22,12 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "two_factor")
+    private Boolean twoFactorEnabled;
+
+    @Column(name = "security_key")
+    private String securityKey;
+
     @ManyToMany(fetch = FetchType.EAGER)
     private Collection<Role> roles = new ArrayList<>();
 

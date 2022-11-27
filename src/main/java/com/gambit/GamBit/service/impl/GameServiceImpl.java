@@ -19,6 +19,8 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Random;
 
+import static com.gambit.GamBit.service.common.Hashing.getHash;
+
 @Service
 @RequiredArgsConstructor
 public class GameServiceImpl implements GameService {
@@ -39,13 +41,6 @@ public class GameServiceImpl implements GameService {
                 " | timestamp: " + game.getDateTime() +
                 " | RESULT: " + game.getGameScore() +
                 " | protection: " + game.getRandomSalt();
-    }
-
-    public static String byteArrayToHex(byte[] bytes) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for(byte b: bytes)
-            stringBuilder.append(String.format("%02x", b));
-        return stringBuilder.toString();
     }
 
     @Override
@@ -105,13 +100,6 @@ public class GameServiceImpl implements GameService {
     @Override
     public String getHashedResult(Long id) throws ObjectNotFoundException {
         String message = getNotHashedResult(id);
-        try{
-            MessageDigest digester = MessageDigest.getInstance("SHA-256");
-            byte[] hashedMessage = digester.digest(message.getBytes());
-             return byteArrayToHex(hashedMessage);
-        } catch (Exception ex){
-            return "Error occurred during hashing result";
-            // TODO : maybe do smth here (there should be no exception actually)
-        }
+        return getHash(message);
     }
 }
