@@ -23,6 +23,7 @@ public class DeviceServiceImpl implements DeviceService {
 
         if(!user.isPresent()) return false;
         if(user.get().getSecurityKey() == null) return false;
+        System.out.println(hashedKey + " | " + user.get().getSecurityKey());
         return hashedKey.equals(user.get().getSecurityKey());
     }
 }

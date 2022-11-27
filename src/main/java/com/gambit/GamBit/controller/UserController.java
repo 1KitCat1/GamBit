@@ -4,6 +4,7 @@ import com.gambit.GamBit.exception.UserAlreadyExistException;
 import com.gambit.GamBit.exception.UserNotFoundException;
 import com.gambit.GamBit.model.User;
 import com.gambit.GamBit.service.UserService;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -92,15 +93,22 @@ public class UserController {
     }
 
     @PostMapping(ACCESS_USER + USERS + "/setVerification")
-    public ResponseEntity<String> setVerification(@RequestBody Long id,
-                                                  @RequestBody Boolean twoFactorEnabled,
-                                                  @RequestBody String verificationKey
+    public ResponseEntity<String> setVerification(@RequestBody TwoFactorVerificationInput input
     ){
         try {
-            userService.setVerification(id, twoFactorEnabled, verificationKey);
+            userService.setVerification(input.userId,
+                                        input.twoFactorEnabled,
+                                        input.verificationKey);
             return ResponseEntity.ok("Two factor verification settings updated");
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body("Error occurred during updating verification parameters");
         }
+    }
+
+    @Data
+    private static class TwoFactorVerificationInput {
+        private Long userId;
+        private Boolean twoFactorEnabled;
+        private String verificationKey;
     }
 }

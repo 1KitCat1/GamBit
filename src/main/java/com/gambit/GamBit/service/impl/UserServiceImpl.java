@@ -101,13 +101,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                                 Boolean twoFactorEnabled,
                                 String securityKey
     ) throws UserNotFoundException {
-        Optional<User> user = userRepository.findById(id);
-        if(!user.isPresent()) {
+        Optional<User> userOptional = userRepository.findById(id);
+        if(!userOptional.isPresent()) {
             throw new UserNotFoundException("No user with such id");
         }
-
-        user.get().setSecurityKey(getHash(securityKey));
-        user.get().setTwoFactorEnabled(twoFactorEnabled);
+        User user = userOptional.get();
+        user.setSecurityKey(getHash(securityKey));
+        user.setTwoFactorEnabled(twoFactorEnabled);
+        userRepository.save(user);
     }
 
     @Override
