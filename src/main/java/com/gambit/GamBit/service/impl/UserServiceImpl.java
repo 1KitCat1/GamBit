@@ -21,6 +21,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import static com.gambit.GamBit.service.common.Hashing.getHash;
+
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
@@ -92,6 +94,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         Role role = roleRepository.findByName(roleName);
         user.getRoles().add(role);
         userRepository.save(user);
+    }
+
+    @Override
+    public void setVerification(Long id,
+                                Boolean twoFactorEnabled,
+                                String securityKey
+    ) throws UserNotFoundException {
+        Optional<User> user = userRepository.findById(id);
+        if(!user.isPresent()) {
+            throw new UserNotFoundException("No user with such id");
+        }
+
+        user.get().setSecurityKey(getHash(securityKey));
+        user.get().setTwoFactorEnabled(twoFactorEnabled);
     }
 
     @Override

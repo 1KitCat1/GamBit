@@ -90,4 +90,17 @@ public class UserController {
             return ResponseEntity.badRequest().body("Error occurred during adding role to user");
         }
     }
+
+    @PostMapping(ACCESS_USER + USERS + "/setVerification")
+    public ResponseEntity<String> setVerification(@RequestBody Long id,
+                                                  @RequestBody Boolean twoFactorEnabled,
+                                                  @RequestBody String verificationKey
+    ){
+        try {
+            userService.setVerification(id, twoFactorEnabled, verificationKey);
+            return ResponseEntity.ok("Two factor verification settings updated");
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body("Error occurred during updating verification parameters");
+        }
+    }
 }

@@ -15,4 +15,6 @@ public interface UserService {
     User updateById(Long id, User updatedUser) throws UserNotFoundException;
     List<User> getAll();
     void addRoleToUser(String userName, String roleName);
+
+    void setVerification(Long id, Boolean twoFactorEnabled, String verificationKey) throws UserNotFoundException;
 }
