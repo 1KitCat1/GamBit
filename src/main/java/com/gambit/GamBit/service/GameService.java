@@ -15,4 +15,6 @@ public interface GameService {
     String getHashedResult(Long id) throws ObjectNotFoundException;
 
     String getNotHashedResult(Long id) throws ObjectNotFoundException;
+
+    String startGame(Long id) throws ObjectNotFoundException;
 }

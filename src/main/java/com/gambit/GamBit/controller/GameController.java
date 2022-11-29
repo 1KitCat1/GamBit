@@ -75,4 +75,13 @@ public class GameController {
             return ResponseEntity.badRequest().body("Error occurred during getting game result");
         }
     }
+
+    @PostMapping(ACCESS_USER + GAMES + "start")
+    public ResponseEntity<String> startGame(@RequestParam Long id) {
+        try {
+            return ResponseEntity.ok("Game start time is " + gameService.startGame(id));
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body("Error occurred while starting a game " + id);
+        }
+    }
 }

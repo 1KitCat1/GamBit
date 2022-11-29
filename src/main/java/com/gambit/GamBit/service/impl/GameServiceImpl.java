@@ -98,6 +98,16 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
+    public String startGame(Long id) throws ObjectNotFoundException {
+        Optional<Game> game = gameRepository.findById(id);
+        if(!game.isPresent()){
+            throw new ObjectNotFoundException("No game with such id");
+        }
+        game.get().setDateTime(LocalDateTime.now());
+        return generateResultMessage(game.get());
+    }
+
+    @Override
     public String getHashedResult(Long id) throws ObjectNotFoundException {
         String message = getNotHashedResult(id);
         return getHash(message);
