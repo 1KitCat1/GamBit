@@ -1,11 +1,14 @@
 package com.gambit.GamBit.controller;
 
+import com.gambit.GamBit.exception.GameAlreadyStartedException;
+import com.gambit.GamBit.exception.ObjectNotFoundException;
 import com.gambit.GamBit.model.Wallet;
 import com.gambit.GamBit.service.WalletService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.gambit.GamBit.controller.AccessRolesController.ACCESS_USER;
@@ -65,6 +68,26 @@ public class WalletController {
             return ResponseEntity.ok("Wallet with id " + id + " has been updated.");
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body("Error occurred during wallet update");
+        }
+    }
+
+    @PostMapping(ACCESS_USER + WALLETS + "/joinGame")
+    public ResponseEntity<String> addWallet(@RequestParam Long walletId, Long gameId){
+        try {
+            walletService.joinGame(walletId, gameId);
+            return ResponseEntity.ok("Wallet " +
+                    walletId +
+                    " has been successfully joined game " +
+                    gameId);
+        } catch (GameAlreadyStartedException ex) {
+            return ResponseEntity.badRequest().body("Game with id " + gameId + " has already started");
+        } catch (ObjectNotFoundException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }catch (Exception ex){
+            return ResponseEntity.badRequest().body("Error occurred during joining wallet " +
+                    walletId +
+                    " to game " +
+                    gameId);
         }
     }
 }
