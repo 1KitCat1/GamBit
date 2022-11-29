@@ -83,7 +83,7 @@ public class WalletController {
             return ResponseEntity.badRequest().body("Game with id " + gameId + " has already started");
         } catch (ObjectNotFoundException ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
-        }catch (Exception ex){
+        } catch (Exception ex){
             return ResponseEntity.badRequest().body("Error occurred during joining wallet " +
                     walletId +
                     " to game " +

@@ -17,9 +17,12 @@ public class Player {
     @JoinColumn(name="game_id", referencedColumnName = "id")
     Game game;
 
-    @Column(name = "tokens_amount")
-    Long tokensAmount;
+    @Column(name = "tokens_input")
+    Long tokensInput;
 
-    @Column(name = "finish_score")
-    Long finishScore;
+    @Column(name = "finish_return")
+    Long tokensReturn;
+
+    @Column(name = "is_victory")
+    Boolean isVictory;
 }

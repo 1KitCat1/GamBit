@@ -69,4 +69,13 @@ public class PlayerController {
             return ResponseEntity.badRequest().body("Error occurred during game update");
         }
     }
+
+    @PostMapping(ACCESS_USER + PLAYERS + "/endPlay")
+    public ResponseEntity<Long> endPlay(@RequestParam Long playerId) {
+        try {
+            return ResponseEntity.ok(playerService.endPlay(playerId));
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
 }

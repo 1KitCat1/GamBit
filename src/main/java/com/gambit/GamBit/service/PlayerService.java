@@ -1,6 +1,8 @@
 package com.gambit.GamBit.service;
 
+import com.gambit.GamBit.exception.GameNotStartedException;
 import com.gambit.GamBit.exception.ObjectNotFoundException;
+import com.gambit.GamBit.exception.PlayEndedException;
 import com.gambit.GamBit.model.Game;
 import com.gambit.GamBit.model.Player;
 
@@ -16,4 +18,6 @@ public interface PlayerService {
     void updateById(Long id, Player updatedGame) throws ObjectNotFoundException;
 
     List<Player> getByWallet(String address);
+
+    Long endPlay(Long playerId) throws ObjectNotFoundException, GameNotStartedException, PlayEndedException;
 }

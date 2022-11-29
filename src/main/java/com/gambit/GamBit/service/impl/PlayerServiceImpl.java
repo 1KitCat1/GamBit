@@ -1,6 +1,9 @@
 package com.gambit.GamBit.service.impl;
 
+import com.gambit.GamBit.exception.GameAlreadyStartedException;
+import com.gambit.GamBit.exception.GameNotStartedException;
 import com.gambit.GamBit.exception.ObjectNotFoundException;
+import com.gambit.GamBit.exception.PlayEndedException;
 import com.gambit.GamBit.model.*;
 import com.gambit.GamBit.model.Player;
 import com.gambit.GamBit.repository.GameRepository;
@@ -12,6 +15,8 @@ import com.gambit.GamBit.service.WalletService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +26,6 @@ public class PlayerServiceImpl implements PlayerService {
     private final PlayerRepository playerRepository;
     private final GameRepository gameRepository;
     private final WalletRepository walletRepository;
-
 
     private void loadConnectedEntitiesById(Player player){
         if(player.getWallet() != null && player.getWallet().getId() != null){
@@ -74,5 +78,46 @@ public class PlayerServiceImpl implements PlayerService {
     public List<Player> getByWallet(String address) {
         Wallet wallet = walletRepository.findByAddress(address);
         return playerRepository.findByWallet(wallet);
+    }
+
+    private Long tokensIncrease(Long tokens, Long milliseconds) {
+        // formula that calculate increase of tokens in case of winning
+        return (long)(tokens * (1 + (double)milliseconds / 2000.0));
+    }
+    
+    @Override
+    public Long endPlay(Long playerId)
+            throws ObjectNotFoundException,
+            GameNotStartedException,
+            PlayEndedException
+    {
+        Optional<Player> player = playerRepository.findById(playerId);
+        if(!player.isPresent()) {
+            throw new ObjectNotFoundException("Player with id " + playerId + " not found");
+        }
+        if(player.get().getIsVictory() != null) {
+            throw new PlayEndedException("Player has already ended game");
+        }
+        Game game = player.get().getGame();
+        LocalDateTime startGameTime = game.getDateTime();
+        if(startGameTime == null) {
+            throw new GameNotStartedException("Game is not started");
+        }
+
+        final Long NANO_IN_MILLISECONDS = 1_000_000L;
+        LocalDateTime endGameTime =
+                startGameTime.plusNanos(game.getGameScore() * NANO_IN_MILLISECONDS);
+        LocalDateTime endOfPlayTime = LocalDateTime.now();
+        if(endGameTime.isAfter(endOfPlayTime)){
+            player.get().setIsVictory(true);
+            Long millisecondsInGame = ChronoUnit.MILLIS.between(startGameTime, endOfPlayTime);
+            player.get().setTokensReturn(
+                    tokensIncrease(player.get().getTokensInput(), millisecondsInGame));
+        }
+        else  {
+            player.get().setIsVictory(false);
+            player.get().setTokensReturn(0L);
+        }
+        return null;
     }
 }
