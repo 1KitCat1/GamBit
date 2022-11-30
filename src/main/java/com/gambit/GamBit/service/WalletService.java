@@ -1,12 +1,13 @@
 package com.gambit.GamBit.service;
 
 import com.gambit.GamBit.exception.GameAlreadyStartedException;
-import com.gambit.GamBit.exception.ObjectAlreadyExistException;
 import com.gambit.GamBit.exception.ObjectNotFoundException;
 import com.gambit.GamBit.exception.UserNotFoundException;
+import com.gambit.GamBit.model.Player;
 import com.gambit.GamBit.model.Wallet;
+import com.gambit.GamBit.model.dto.JoinGame;
+import org.hibernate.mapping.Join;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface WalletService {
@@ -21,5 +22,5 @@ public interface WalletService {
 
     List<Wallet> getByUserId(Long id) throws UserNotFoundException;
 
-    void joinGame(Long walletId, Long gameId) throws ObjectNotFoundException, GameAlreadyStartedException;
+    JoinGame joinGame(JoinGame joinGameData) throws ObjectNotFoundException, GameAlreadyStartedException;
 }

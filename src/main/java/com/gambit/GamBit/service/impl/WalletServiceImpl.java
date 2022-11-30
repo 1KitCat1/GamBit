@@ -1,16 +1,15 @@
 package com.gambit.GamBit.service.impl;
 
 import com.gambit.GamBit.exception.GameAlreadyStartedException;
-import com.gambit.GamBit.exception.ObjectAlreadyExistException;
 import com.gambit.GamBit.exception.ObjectNotFoundException;
 import com.gambit.GamBit.exception.UserNotFoundException;
 import com.gambit.GamBit.model.*;
+import com.gambit.GamBit.model.dto.JoinGame;
 import com.gambit.GamBit.repository.*;
 import com.gambit.GamBit.service.WalletService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -84,9 +83,9 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public void joinGame(Long walletId, Long gameId) throws ObjectNotFoundException, GameAlreadyStartedException {
-        Optional<Game> game = gameRepository.findById(gameId);
-        Optional<Wallet> wallet = walletRepository.findById(walletId);
+    public JoinGame joinGame(JoinGame joinGameData) throws ObjectNotFoundException, GameAlreadyStartedException {
+        Optional<Game> game = gameRepository.findById(joinGameData.getGameId());
+        Optional<Wallet> wallet = walletRepository.findById(joinGameData.getWalletId());
 
         if(!game.isPresent()) {
             throw new ObjectNotFoundException("No game with such id");
@@ -100,6 +99,9 @@ public class WalletServiceImpl implements WalletService {
         Player player = new Player();
         player.setGame(game.get());
         player.setWallet(wallet.get());
-        playerRepository.save(player);
+        player.setTokensInput(joinGameData.getTokensInput());
+        Player savedPlayer = playerRepository.save(player);
+        joinGameData.setPlayerId(savedPlayer.getId());
+        return joinGameData;
     }
 }

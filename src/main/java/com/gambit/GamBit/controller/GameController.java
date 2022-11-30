@@ -76,7 +76,7 @@ public class GameController {
         }
     }
 
-    @PostMapping(ACCESS_USER + GAMES + "start")
+    @PostMapping(ACCESS_USER + GAMES + "/start")
     public ResponseEntity<String> startGame(@RequestParam Long id) {
         try {
             return ResponseEntity.ok("Game start time is " + gameService.startGame(id));

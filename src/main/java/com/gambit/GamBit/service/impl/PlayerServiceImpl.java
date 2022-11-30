@@ -1,17 +1,15 @@
 package com.gambit.GamBit.service.impl;
 
-import com.gambit.GamBit.exception.GameAlreadyStartedException;
 import com.gambit.GamBit.exception.GameNotStartedException;
 import com.gambit.GamBit.exception.ObjectNotFoundException;
 import com.gambit.GamBit.exception.PlayEndedException;
 import com.gambit.GamBit.model.*;
 import com.gambit.GamBit.model.Player;
+import com.gambit.GamBit.model.dto.PlayerResult;
 import com.gambit.GamBit.repository.GameRepository;
 import com.gambit.GamBit.repository.PlayerRepository;
 import com.gambit.GamBit.repository.WalletRepository;
-import com.gambit.GamBit.service.GameService;
 import com.gambit.GamBit.service.PlayerService;
-import com.gambit.GamBit.service.WalletService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -84,9 +82,9 @@ public class PlayerServiceImpl implements PlayerService {
         // formula that calculate increase of tokens in case of winning
         return (long)(tokens * (1 + (double)milliseconds / 2000.0));
     }
-    
+
     @Override
-    public Long endPlay(Long playerId)
+    public PlayerResult endPlay(Long playerId)
             throws ObjectNotFoundException,
             GameNotStartedException,
             PlayEndedException
@@ -118,6 +116,13 @@ public class PlayerServiceImpl implements PlayerService {
             player.get().setIsVictory(false);
             player.get().setTokensReturn(0L);
         }
-        return null;
+        return new PlayerResult(
+                player.get().getId(),
+                player.get().getWallet().getId(),
+                player.get().getGame().getId(),
+                player.get().getTokensInput(),
+                player.get().getTokensReturn(),
+                player.get().getIsVictory()
+                );
     }
 }

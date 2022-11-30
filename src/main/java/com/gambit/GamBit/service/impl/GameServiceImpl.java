@@ -45,9 +45,9 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void addGame(Game game) {
-        if(game.getDateTime() == null) { game.setDateTime(LocalDateTime.now()); }
+        final long MAX_GAME_LENGTH = 50_000L; // In milliseconds
         if(game.getGameScore() == null) {
-            game.setGameScore(Math.abs(random.nextLong()) % 1000);
+            game.setGameScore(Math.abs(random.nextLong()) % MAX_GAME_LENGTH);
         }
         if(game.getRandomSalt() == null) {
             game.setRandomSalt(
@@ -104,7 +104,8 @@ public class GameServiceImpl implements GameService {
             throw new ObjectNotFoundException("No game with such id");
         }
         game.get().setDateTime(LocalDateTime.now());
-        return generateResultMessage(game.get());
+        gameRepository.save(game.get());
+        return game.get().getDateTime().toString();
     }
 
     @Override

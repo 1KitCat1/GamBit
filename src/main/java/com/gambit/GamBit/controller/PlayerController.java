@@ -1,7 +1,11 @@
 package com.gambit.GamBit.controller;
 
+import com.gambit.GamBit.exception.GameNotStartedException;
+import com.gambit.GamBit.exception.ObjectNotFoundException;
+import com.gambit.GamBit.exception.PlayEndedException;
 import com.gambit.GamBit.model.Game;
 import com.gambit.GamBit.model.Player;
+import com.gambit.GamBit.model.dto.PlayerResult;
 import com.gambit.GamBit.service.GameService;
 import com.gambit.GamBit.service.PlayerService;
 import lombok.RequiredArgsConstructor;
@@ -71,11 +75,11 @@ public class PlayerController {
     }
 
     @PostMapping(ACCESS_USER + PLAYERS + "/endPlay")
-    public ResponseEntity<Long> endPlay(@RequestParam Long playerId) {
+    public ResponseEntity<PlayerResult> endPlay(@RequestParam Long playerId) {
         try {
             return ResponseEntity.ok(playerService.endPlay(playerId));
-        } catch (Exception ex) {
-            return ResponseEntity.badRequest().body(null);
+        } catch (ObjectNotFoundException | PlayEndedException | GameNotStartedException ex) {
+            return ResponseEntity.badRequest().body(new PlayerResult(ex.getMessage()));
         }
     }
 }
