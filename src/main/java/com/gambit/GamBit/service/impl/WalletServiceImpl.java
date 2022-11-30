@@ -93,7 +93,7 @@ public class WalletServiceImpl implements WalletService {
         if(!wallet.isPresent()) {
             throw new ObjectNotFoundException("No wallet with such id");
         }
-        if(game.get().getDateTime() != null) {
+        if(game.get().getStartTime() != null) {
             throw new GameAlreadyStartedException("Game already started exception");
         }
         Player player = new Player();

@@ -1,6 +1,8 @@
 package com.gambit.GamBit.controller;
 
+import com.gambit.GamBit.exception.ObjectNotFoundException;
 import com.gambit.GamBit.model.Game;
+import com.gambit.GamBit.model.dto.GameStatus;
 import com.gambit.GamBit.service.GameService;
 import com.gambit.GamBit.service.WalletService;
 import lombok.RequiredArgsConstructor;
@@ -82,6 +84,16 @@ public class GameController {
             return ResponseEntity.ok("Game start time is " + gameService.startGame(id));
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body("Error occurred while starting a game " + id);
+        }
+    }
+
+    @GetMapping(ACCESS_USER + GAMES + "/getStatus")
+    public ResponseEntity<GameStatus> getGameStatus(@RequestParam Long id) {
+        try {
+            return ResponseEntity.ok(gameService.getStatus(id));
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
+            return ResponseEntity.badRequest().body(new GameStatus(ex.getMessage()));
         }
     }
 }

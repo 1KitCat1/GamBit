@@ -11,8 +11,8 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(name = "tokens_amount")
-    LocalDateTime dateTime;
+    @Column(name = "start_time")
+    LocalDateTime startTime;
 
     @Column(name = "game_score")
     Long gameScore;

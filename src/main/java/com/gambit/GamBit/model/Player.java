@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 @Entity(name = "player") @Data
 public class Player {
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
@@ -20,7 +21,7 @@ public class Player {
     @Column(name = "tokens_input")
     Long tokensInput;
 
-    @Column(name = "finish_return")
+    @Column(name = "tokens_return")
     Long tokensReturn;
 
     @Column(name = "is_victory")

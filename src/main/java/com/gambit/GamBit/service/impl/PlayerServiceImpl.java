@@ -18,6 +18,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
+import static com.gambit.GamBit.service.common.CalculateTokensIncrease.tokensIncrease;
+
 @Service
 @RequiredArgsConstructor
 public class PlayerServiceImpl implements PlayerService {
@@ -78,11 +80,6 @@ public class PlayerServiceImpl implements PlayerService {
         return playerRepository.findByWallet(wallet);
     }
 
-    private Long tokensIncrease(Long tokens, Long milliseconds) {
-        // formula that calculate increase of tokens in case of winning
-        return (long)(tokens * (1 + (double)milliseconds / 2000.0));
-    }
-
     @Override
     public PlayerResult endPlay(Long playerId)
             throws ObjectNotFoundException,
@@ -93,11 +90,12 @@ public class PlayerServiceImpl implements PlayerService {
         if(!player.isPresent()) {
             throw new ObjectNotFoundException("Player with id " + playerId + " not found");
         }
-        if(player.get().getIsVictory() != null) {
+        if(player.get().getTokensReturn() != null) {
             throw new PlayEndedException("Player has already ended game");
         }
+
         Game game = player.get().getGame();
-        LocalDateTime startGameTime = game.getDateTime();
+        LocalDateTime startGameTime = game.getStartTime();
         if(startGameTime == null) {
             throw new GameNotStartedException("Game is not started");
         }
@@ -105,7 +103,9 @@ public class PlayerServiceImpl implements PlayerService {
         final Long NANO_IN_MILLISECONDS = 1_000_000L;
         LocalDateTime endGameTime =
                 startGameTime.plusNanos(game.getGameScore() * NANO_IN_MILLISECONDS);
+
         LocalDateTime endOfPlayTime = LocalDateTime.now();
+
         if(endGameTime.isAfter(endOfPlayTime)){
             player.get().setIsVictory(true);
             Long millisecondsInGame = ChronoUnit.MILLIS.between(startGameTime, endOfPlayTime);
@@ -116,6 +116,7 @@ public class PlayerServiceImpl implements PlayerService {
             player.get().setIsVictory(false);
             player.get().setTokensReturn(0L);
         }
+        playerRepository.save(player.get());
         return new PlayerResult(
                 player.get().getId(),
                 player.get().getWallet().getId(),

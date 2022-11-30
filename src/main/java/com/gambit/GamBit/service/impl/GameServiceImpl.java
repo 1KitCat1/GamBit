@@ -1,24 +1,21 @@
 package com.gambit.GamBit.service.impl;
 
 import com.gambit.GamBit.exception.ObjectNotFoundException;
-import com.gambit.GamBit.exception.RoleAlreadyExistException;
 import com.gambit.GamBit.model.Game;
-import com.gambit.GamBit.model.Player;
 import com.gambit.GamBit.model.SmartContract;
-import com.gambit.GamBit.model.Wallet;
+import com.gambit.GamBit.model.dto.GameStatus;
 import com.gambit.GamBit.repository.GameRepository;
 import com.gambit.GamBit.repository.SmartContractRepository;
 import com.gambit.GamBit.service.GameService;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.bridge.Message;
 import org.springframework.stereotype.Service;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.Random;
 
+import static com.gambit.GamBit.service.common.CalculateTokensIncrease.tokensMultiplier;
 import static com.gambit.GamBit.service.common.Hashing.getHash;
 
 @Service
@@ -38,7 +35,6 @@ public class GameServiceImpl implements GameService {
 
     private String generateResultMessage(Game game){
         return "Game id: " + game.getId() +
-                " | timestamp: " + game.getDateTime() +
                 " | RESULT: " + game.getGameScore() +
                 " | protection: " + game.getRandomSalt();
     }
@@ -103,9 +99,49 @@ public class GameServiceImpl implements GameService {
         if(!game.isPresent()){
             throw new ObjectNotFoundException("No game with such id");
         }
-        game.get().setDateTime(LocalDateTime.now());
+        game.get().setStartTime(LocalDateTime.now());
         gameRepository.save(game.get());
-        return game.get().getDateTime().toString();
+        return game.get().getStartTime().toString();
+    }
+
+    private enum Stage {NOT_STARTED, STARTED, FINISHED};
+
+    @Override
+    public GameStatus getStatus(Long id) throws ObjectNotFoundException {
+        Optional<Game> gameOptional = gameRepository.findById(id);
+        if(!gameOptional.isPresent()) {
+            throw new ObjectNotFoundException("No game with such id");
+        }
+        Game game = gameOptional.get();
+        LocalDateTime endTime = null;
+        if(game.getStartTime() != null) {
+            endTime = game.getStartTime().plus(game.getGameScore(), ChronoUnit.MILLIS);
+        }
+        Stage stage;
+        if(game.getStartTime() == null || endTime == null) {
+            stage = Stage.NOT_STARTED;
+        } else if(LocalDateTime.now().isBefore(endTime)) {
+            stage = Stage.STARTED;
+        }
+        else {
+            stage = Stage.FINISHED;
+        }
+        double currentMultiplier = 1.0;
+        if(stage == Stage.STARTED) {
+            currentMultiplier = tokensMultiplier(
+                    ChronoUnit.MILLIS.between(game.getStartTime(), LocalDateTime.now()));
+        }
+        if(stage == Stage.FINISHED){
+            currentMultiplier = 0.0;
+        }
+        return new GameStatus(
+                game.getId(),
+                game.getStartTime(),
+                endTime,
+                currentMultiplier,
+                tokensMultiplier(game.getGameScore()),
+                stage.name()
+                );
     }
 
     @Override
