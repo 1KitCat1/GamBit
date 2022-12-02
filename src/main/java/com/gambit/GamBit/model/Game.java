@@ -17,9 +17,6 @@ public class Game {
     @Column(name = "game_score")
     Long gameScore;
 
-//    @Column(name = "game_status")
-//    GameStatus gameStatus;
-//
     @Column(name = "random_salt")
     String randomSalt;
 
@@ -27,8 +24,3 @@ public class Game {
     @JoinColumn(name="contract_id", referencedColumnName = "id")
     SmartContract smartContract;
 }
-//enum GameStatus {
-//    NOT_STARTED,
-//    IN_PROGRESS,
-//    FINISHED
-//}
