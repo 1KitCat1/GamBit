@@ -55,13 +55,12 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
         String refreshToken = JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME_MINUTES * MILLISECONDS_IN_MINUTE))
+                .withExpiresAt(new Date(System.currentTimeMillis() + 9*EXPIRATION_TIME_MINUTES * MILLISECONDS_IN_MINUTE))
                 .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
 
-//        response.setHeader("accessToken", accessToken);
-//        response.setHeader("refreshToken", refreshToken);
         HashMap<String, String> tokens = new HashMap<>();
+        tokens.put("username", user.getUsername());
         tokens.put("accessToken", accessToken);
         tokens.put("refreshToken", refreshToken);
 
