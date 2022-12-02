@@ -11,12 +11,16 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static com.gambit.GamBit.controller.AccessRolesController.ACCESS_ADMIN;
+import static com.gambit.GamBit.security.SecurityFunctions.ROLE_ADMIN;
+import static com.gambit.GamBit.security.SecurityFunctions.ROLE_USER;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
@@ -46,10 +50,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/api/visitor/**").permitAll();
 
         http.authorizeRequests().antMatchers("/api/admin/**")
-                .hasAnyAuthority("ROLE_ADMIN");
+                .hasAnyAuthority(ROLE_ADMIN);
         http.authorizeRequests().antMatchers("/api/user/**")
-                .hasAnyAuthority("ROLE_USER", "ROLE_ADMIN");
-//        http.authorizeRequests().antMatchers(GET, ACCESS_ADMIN + "/**").hasAnyAuthority("ROLE_ADMIN");
+                .hasAnyAuthority(ROLE_USER, ROLE_ADMIN);
 
         http.authorizeRequests().anyRequest().permitAll();
         http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));

@@ -1,5 +1,6 @@
 package com.gambit.GamBit.service.impl;
 
+import com.gambit.GamBit.exception.GameNotFinishedException;
 import com.gambit.GamBit.exception.ObjectNotFoundException;
 import com.gambit.GamBit.model.Game;
 import com.gambit.GamBit.model.SmartContract;
@@ -85,10 +86,14 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public String getNotHashedResult(Long id) throws ObjectNotFoundException {
+    public String getNotHashedResult(Long id) throws ObjectNotFoundException, GameNotFinishedException {
         Optional<Game> game = gameRepository.findById(id);
         if(!game.isPresent()){
             throw new ObjectNotFoundException("No game with such id");
+        }
+        GameStatus gameStatus = getStatus(id);
+        if(!gameStatus.getGameStatus().equals(Stage.FINISHED.name())) {
+            throw new GameNotFinishedException("Game not finished");
         }
         return generateResultMessage(game.get());
     }
@@ -104,7 +109,7 @@ public class GameServiceImpl implements GameService {
         return game.get().getStartTime().toString();
     }
 
-    private enum Stage {NOT_STARTED, STARTED, FINISHED};
+    private enum Stage {NOT_STARTED, STARTED, FINISHED}
 
     @Override
     public GameStatus getStatus(Long id) throws ObjectNotFoundException {
@@ -146,7 +151,11 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public String getHashedResult(Long id) throws ObjectNotFoundException {
-        String message = getNotHashedResult(id);
+        Optional<Game> game = gameRepository.findById(id);
+        if(!game.isPresent()){
+            throw new ObjectNotFoundException("No game with such id");
+        }
+        String message = generateResultMessage(game.get());
         return getHash(message);
     }
 }

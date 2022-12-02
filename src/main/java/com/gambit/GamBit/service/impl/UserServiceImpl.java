@@ -1,5 +1,6 @@
 package com.gambit.GamBit.service.impl;
 
+import com.gambit.GamBit.exception.UserNotAuthorizedException;
 import com.gambit.GamBit.exception.UserNotFoundException;
 import com.gambit.GamBit.exception.UserAlreadyExistException;
 import com.gambit.GamBit.model.Role;
@@ -21,6 +22,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import static com.gambit.GamBit.security.SecurityFunctions.*;
+import static com.gambit.GamBit.security.SecurityFunctions.getUserNameByContext;
 import static com.gambit.GamBit.service.common.Hashing.getHash;
 
 @Service
@@ -53,7 +56,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if(!user.isPresent()){
             throw new UserNotFoundException("User with such id has not been found");
         }
-//        System.out.println(user.get().getName());
         return user.get();
     }
 
@@ -63,6 +65,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if(user == null){
             throw new UserNotFoundException("User with such name has not been found");
         }
+
         return user;
     }
 
@@ -72,10 +75,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User updateById(Long id, User updatedUser) throws UserNotFoundException{
+    public User updateById(Long id, User updatedUser) throws UserNotFoundException, UserNotAuthorizedException {
         Optional<User> oldUser = userRepository.findById(id);
         if(!oldUser.isPresent()){
             throw new UserNotFoundException("User with such id has not been found");
+        }
+        User requestedUser = userRepository.findByName(getUserNameByContext());
+        if(requestedUser == null ||
+                (!getUserNameByContext().equals(oldUser.get().getName()) &&
+                !hasRoleByContext(ROLE_ADMIN) )) {
+            throw new UserNotAuthorizedException("You are not authorized to edit given profile");
         }
         updatedUser.setId(id);
         userRepository.save(updatedUser);

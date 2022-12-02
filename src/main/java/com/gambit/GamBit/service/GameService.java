@@ -1,5 +1,6 @@
 package com.gambit.GamBit.service;
 
+import com.gambit.GamBit.exception.GameNotFinishedException;
 import com.gambit.GamBit.exception.ObjectNotFoundException;
 import com.gambit.GamBit.model.Game;
 import com.gambit.GamBit.model.dto.GameStatus;
@@ -15,7 +16,7 @@ public interface GameService {
 
     String getHashedResult(Long id) throws ObjectNotFoundException;
 
-    String getNotHashedResult(Long id) throws ObjectNotFoundException;
+    String getNotHashedResult(Long id) throws ObjectNotFoundException, GameNotFinishedException;
 
     String startGame(Long id) throws ObjectNotFoundException;
 

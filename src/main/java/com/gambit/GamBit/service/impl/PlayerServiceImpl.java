@@ -86,15 +86,16 @@ public class PlayerServiceImpl implements PlayerService {
             GameNotStartedException,
             PlayEndedException
     {
-        Optional<Player> player = playerRepository.findById(playerId);
-        if(!player.isPresent()) {
+        Optional<Player> playerOptional = playerRepository.findById(playerId);
+        if(!playerOptional.isPresent()) {
             throw new ObjectNotFoundException("Player with id " + playerId + " not found");
         }
-        if(player.get().getTokensReturn() != null) {
+        Player player = playerOptional.get();
+        if(player.getTokensReturn() != null) {
             throw new PlayEndedException("Player has already ended game");
         }
 
-        Game game = player.get().getGame();
+        Game game = player.getGame();
         LocalDateTime startGameTime = game.getStartTime();
         if(startGameTime == null) {
             throw new GameNotStartedException("Game is not started");
@@ -107,23 +108,23 @@ public class PlayerServiceImpl implements PlayerService {
         LocalDateTime endOfPlayTime = LocalDateTime.now();
 
         if(endGameTime.isAfter(endOfPlayTime)){
-            player.get().setIsVictory(true);
+            player.setIsVictory(true);
             Long millisecondsInGame = ChronoUnit.MILLIS.between(startGameTime, endOfPlayTime);
-            player.get().setTokensReturn(
-                    tokensIncrease(player.get().getTokensInput(), millisecondsInGame));
+            player.setTokensReturn(
+                    tokensIncrease(player.getTokensInput(), millisecondsInGame));
         }
         else  {
-            player.get().setIsVictory(false);
-            player.get().setTokensReturn(0L);
+            player.setIsVictory(false);
+            player.setTokensReturn(0L);
         }
-        playerRepository.save(player.get());
+        playerRepository.save(playerOptional.get());
         return new PlayerResult(
-                player.get().getId(),
-                player.get().getWallet().getId(),
-                player.get().getGame().getId(),
-                player.get().getTokensInput(),
-                player.get().getTokensReturn(),
-                player.get().getIsVictory()
+                player.getId(),
+                player.getWallet().getId(),
+                player.getGame().getId(),
+                player.getTokensInput(),
+                player.getTokensReturn(),
+                player.getIsVictory()
                 );
     }
 }
