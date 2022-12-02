@@ -1,12 +1,16 @@
 package com.gambit.GamBit.controller;
 
 import com.gambit.GamBit.exception.UserAlreadyExistException;
+import com.gambit.GamBit.exception.UserNotAuthorized;
 import com.gambit.GamBit.exception.UserNotFoundException;
 import com.gambit.GamBit.model.User;
 import com.gambit.GamBit.service.UserService;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -75,14 +79,14 @@ public class UserController {
         try {
             userService.updateById(id, updatedUser);
             return ResponseEntity.ok("User with id " + id + " has been updated.");
-        } catch (UserNotFoundException ex) {
-            return ResponseEntity.badRequest().body("User with id " + id + " has not been found.");
+        } catch (UserNotFoundException | UserNotAuthorized ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body("Error occurred during user update");
         }
     }
 
-    @PostMapping(ACCESS_USER + USERS + "/addRole")
+    @PostMapping(ACCESS_ADMIN + USERS + "/addRole")
     public ResponseEntity<String> addRoleToUser(@RequestParam String userName, @RequestParam String roleName){
         try {
             userService.addRoleToUser(userName, roleName);

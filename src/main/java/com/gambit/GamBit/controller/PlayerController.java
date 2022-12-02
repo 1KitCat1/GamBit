@@ -36,7 +36,7 @@ public class PlayerController {
         }
     }
 
-    @GetMapping(ACCESS_ADMIN + PLAYERS + "/getById")
+    @GetMapping(ACCESS_USER + PLAYERS + "/getById")
     public ResponseEntity<Player> getPlayerById(@RequestParam Long id) {
         try {
             return ResponseEntity.ok(playerService.getById(id));
@@ -46,7 +46,7 @@ public class PlayerController {
     }
 
     @GetMapping(ACCESS_USER + PLAYERS + "/getByWallet")
-    public ResponseEntity<List<Player>> getPlayerById(@RequestParam String address) {
+    public ResponseEntity<List<Player>> getPlayersByWallet(@RequestParam String address) {
         try {
             return ResponseEntity.ok(playerService.getByWallet(address));
         } catch (Exception ex) {

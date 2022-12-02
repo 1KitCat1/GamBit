@@ -50,7 +50,7 @@ public class RoleController {
         }
     }
 
-    @PostMapping(ACCESS_ADMIN + ROLES + "/update")
+    @PutMapping(ACCESS_ADMIN + ROLES + "/update")
     public ResponseEntity<String> updateRole(@RequestParam Long id,
                                              @RequestBody Role updatedRole)
     {
