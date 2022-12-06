@@ -18,6 +18,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.Set;
+
 import static com.gambit.GamBit.controller.AccessRolesController.ACCESS_ADMIN;
 import static com.gambit.GamBit.security.SecurityFunctions.ROLE_ADMIN;
 import static com.gambit.GamBit.security.SecurityFunctions.ROLE_USER;
@@ -28,6 +30,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @Configuration @EnableWebSecurity @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
+
     @Autowired
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 

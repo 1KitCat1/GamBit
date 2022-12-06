@@ -8,8 +8,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 public class GamBitApplication {
+	public static StaticEntities staticEntities = new StaticEntities();
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(GamBitApplication.class, args);
 	}
 

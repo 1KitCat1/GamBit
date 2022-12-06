@@ -130,7 +130,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.getRoles().forEach(role -> {
             authorities.add(new SimpleGrantedAuthority(role.getName()));
         });
-
+        if(user.getTwoFactorEnabled() != null) authorities.add(new SimpleGrantedAuthority("2FA"));
         return new org.springframework.security.core.userdetails.User(user.getName(), user.getPassword(), authorities);
     }
 }
