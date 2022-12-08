@@ -93,6 +93,11 @@ public class UserController {
         }
     }
 
+    @GetMapping("/test")
+    public ResponseEntity<String> testRequest(){
+        return ResponseEntity.ok("Okshdsdfj");
+    }
+
     @PostMapping(ACCESS_USER + USERS + "/setVerification")
     public ResponseEntity<String> setVerification(@RequestBody TwoFactorVerificationInput input
     ){
