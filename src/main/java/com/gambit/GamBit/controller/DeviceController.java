@@ -17,11 +17,27 @@ public class DeviceController {
     private final String DEVICES = "api/device";
     private final DeviceService deviceService;
 
-    @PostMapping(DEVICES + "/authorize")
+    @PostMapping(DEVICES + "/authorizeWithBody")
     public ResponseEntity<Boolean> twoFactorAuthorize(@RequestBody twoFactorAuthorizationInput input
     ) {
         try {
             Boolean isOk = deviceService.authorize(input.securityKey, input.userId);
+            if(isOk){
+                return ResponseEntity.ok(true);
+            } else {
+                return ResponseEntity.badRequest().body(false);
+            }
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(false);
+        }
+    }
+
+    @PostMapping(DEVICES + "/authorize")
+    public ResponseEntity<Boolean> twoFactorAuthorizeParams(@RequestParam Long userId,
+                                                            @RequestParam String securityKey
+    ) {
+        try {
+            Boolean isOk = deviceService.authorize(securityKey, userId);
             if(isOk){
                 return ResponseEntity.ok(true);
             } else {
