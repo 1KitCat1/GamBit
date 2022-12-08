@@ -1,13 +1,12 @@
 package com.gambit.GamBit.controller;
 
 import com.gambit.GamBit.model.User;
+import com.gambit.GamBit.model.dto.UserVerificationStatus;
 import com.gambit.GamBit.service.DeviceService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -32,6 +31,16 @@ public class DeviceController {
             return ResponseEntity.badRequest().body(false);
         }
     }
+
+    @GetMapping(DEVICES + "/getStatus")
+    public  ResponseEntity<UserVerificationStatus> getStatus(@RequestParam Long userId) {
+        try {
+            return ResponseEntity.ok(deviceService.checkStatus(userId));
+        } catch (Exception exception){
+            return ResponseEntity.badRequest().body(new UserVerificationStatus());
+        }
+    }
+
     @Data
     private static class twoFactorAuthorizationInput{
         private Long userId;

@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import static com.gambit.GamBit.GamBitApplication.staticEntities;
 import static com.gambit.GamBit.security.SecurityFunctions.*;
 import static com.gambit.GamBit.security.SecurityFunctions.getUserNameByContext;
 import static com.gambit.GamBit.service.common.Hashing.getHash;
@@ -130,7 +131,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.getRoles().forEach(role -> {
             authorities.add(new SimpleGrantedAuthority(role.getName()));
         });
-        if(user.getTwoFactorEnabled() != null) authorities.add(new SimpleGrantedAuthority("2FA"));
+        if(user.getTwoFactorEnabled() != null) {
+            authorities.add(new SimpleGrantedAuthority("2FA"));
+            staticEntities.notPassedVerificationUsers.add(user.getName());
+        }
         return new org.springframework.security.core.userdetails.User(user.getName(), user.getPassword(), authorities);
     }
 }
