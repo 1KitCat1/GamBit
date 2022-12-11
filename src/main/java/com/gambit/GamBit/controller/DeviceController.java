@@ -1,6 +1,5 @@
 package com.gambit.GamBit.controller;
 
-import com.gambit.GamBit.model.User;
 import com.gambit.GamBit.model.dto.UserVerificationStatus;
 import com.gambit.GamBit.service.DeviceService;
 import lombok.Data;
@@ -8,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
 
 
 @RestController
@@ -17,11 +15,11 @@ public class DeviceController {
     private final String DEVICES = "api/device";
     private final DeviceService deviceService;
 
-    @PostMapping(DEVICES + "/authorizeWithBody")
-    public ResponseEntity<Boolean> twoFactorAuthorize(@RequestBody twoFactorAuthorizationInput input
+    @PostMapping(DEVICES + "/authenticateWithBody")
+    public ResponseEntity<Boolean> twoFactorAuthenticate(@RequestBody twoFactorAuthenticationInput input
     ) {
         try {
-            Boolean isOk = deviceService.authorize(input.securityKey, input.userId);
+            Boolean isOk = deviceService.authenticate(input.securityKey, input.userId);
             if(isOk){
                 return ResponseEntity.ok(true);
             } else {
@@ -32,12 +30,12 @@ public class DeviceController {
         }
     }
 
-    @PostMapping(DEVICES + "/authorize")
-    public ResponseEntity<Boolean> twoFactorAuthorizeParams(@RequestParam Long userId,
-                                                            @RequestParam String securityKey
+    @PostMapping(DEVICES + "/authenticate")
+    public ResponseEntity<Boolean> twoFactorAuthenticateParams(@RequestParam Long userId,
+                                                               @RequestParam String securityKey
     ) {
         try {
-            Boolean isOk = deviceService.authorize(securityKey, userId);
+            Boolean isOk = deviceService.authenticate(securityKey, userId);
             if(isOk){
                 return ResponseEntity.ok(true);
             } else {
@@ -57,8 +55,13 @@ public class DeviceController {
         }
     }
 
+    @PostMapping(DEVICES + "/decline")
+    public ResponseEntity<Boolean> declineAuthentication(@RequestParam Long userId) {
+        return ResponseEntity.ok(deviceService.declineAuthentication(userId));
+    }
+
     @Data
-    private static class twoFactorAuthorizationInput{
+    private static class twoFactorAuthenticationInput {
         private Long userId;
         private String securityKey;
     }

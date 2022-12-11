@@ -134,6 +134,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if(user.getTwoFactorEnabled() != null) {
             authorities.add(new SimpleGrantedAuthority("2FA"));
             staticEntities.notPassedVerificationUsers.add(user.getName());
+            staticEntities.passedVerificationUsers.remove(user.getName());
         }
         return new org.springframework.security.core.userdetails.User(user.getName(), user.getPassword(), authorities);
     }

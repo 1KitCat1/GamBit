@@ -98,14 +98,14 @@ public class UserController {
         return ResponseEntity.ok("Okshdsdfj");
     }
 
-    @PostMapping(ACCESS_USER + USERS + "/setVerification")
+    @PostMapping(ACCESS_USER + USERS + "/set2FA")
     public ResponseEntity<String> setVerification(@RequestBody TwoFactorVerificationInput input
     ){
         try {
             userService.setVerification(input.userId,
                                         input.twoFactorEnabled,
                                         input.verificationKey);
-            return ResponseEntity.ok("Two factor verification settings updated");
+            return ResponseEntity.ok("Two factor authentication settings updated");
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body("Error occurred during updating verification parameters");
         }

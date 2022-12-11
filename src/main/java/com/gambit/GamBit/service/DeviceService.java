@@ -4,7 +4,9 @@ import com.gambit.GamBit.model.dto.UserVerificationStatus;
 
 public interface DeviceService {
 
-    Boolean authorize(String securityKey, Long id);
+    Boolean authenticate(String securityKey, Long id);
 
     UserVerificationStatus checkStatus(Long id);
+
+    Boolean declineAuthentication(Long userId);
 }

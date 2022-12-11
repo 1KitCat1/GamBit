@@ -19,7 +19,7 @@ import static com.gambit.GamBit.service.common.Hashing.getHash;
 public class DeviceServiceImpl implements DeviceService {
     private final UserRepository userRepository;
 
-    public Boolean authorize(String securityKey, Long userId){
+    public Boolean authenticate(String securityKey, Long userId){
         String hashedKey = getHash(securityKey);
         Optional<User> user = userRepository.findById(userId);
 
@@ -41,5 +41,13 @@ public class DeviceServiceImpl implements DeviceService {
                 staticEntities.notPassedVerificationUsers.contains(user.getName());
 
         return new UserVerificationStatus(user.getId(), user.getName(), is2FAPending);
+    }
+
+    @Override
+    public Boolean declineAuthentication(Long userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if(!userOptional.isPresent()) return false;
+
+        return staticEntities.notPassedVerificationUsers.remove(userOptional.get().getName());
     }
 }
