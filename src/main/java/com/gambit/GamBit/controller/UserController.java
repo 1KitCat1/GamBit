@@ -97,6 +97,10 @@ public class UserController {
     public ResponseEntity<String> testRequest(){
         return ResponseEntity.ok("Okshdsdfj");
     }
+    @PostMapping("/testPost")
+    public ResponseEntity<String> testPostRequest(){
+        return ResponseEntity.ok("OkshdsdfjPost");
+    }
 
     @PostMapping(ACCESS_USER + USERS + "/set2FA")
     public ResponseEntity<String> setVerification(@RequestBody TwoFactorVerificationInput input
