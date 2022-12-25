@@ -51,6 +51,15 @@ public class WalletController {
         }
     }
 
+    @GetMapping(ACCESS_USER + WALLETS + "/getByUsername")
+    public ResponseEntity<List<Wallet>> getWalletsByUsername(@RequestParam String name) {
+        try {
+            return ResponseEntity.ok(walletService.getByUsername(name));
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
     @DeleteMapping(ACCESS_USER + WALLETS + "/delete")
     public ResponseEntity<String> deleteWallet(@RequestParam Long id) {
         try {

@@ -23,4 +23,6 @@ public interface WalletService {
     List<Wallet> getByUserId(Long id) throws UserNotFoundException;
 
     JoinGame joinGame(JoinGame joinGameData) throws ObjectNotFoundException, GameAlreadyStartedException;
+
+    List<Wallet> getByUsername(String name) throws UserNotFoundException;
 }

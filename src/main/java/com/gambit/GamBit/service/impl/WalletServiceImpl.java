@@ -21,6 +21,7 @@ public class WalletServiceImpl implements WalletService {
     private final UserRepository userRepository;
     private final DecentralizedNetworkRepository networkRepository;
     private final GameRepository gameRepository;
+
     private final PlayerRepository playerRepository;
 
 
@@ -80,6 +81,15 @@ public class WalletServiceImpl implements WalletService {
             throw new UserNotFoundException("No user with such username");
         }
         return walletRepository.findByUser(user.get());
+    }
+
+    @Override
+    public List<Wallet> getByUsername(String name) throws UserNotFoundException {
+        User user = userRepository.findByName(name);
+        if(user == null){
+            throw new UserNotFoundException("No user with such username");
+        }
+        return walletRepository.findByUser(user);
     }
 
     @Override
